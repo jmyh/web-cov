@@ -26,6 +26,10 @@
     margin: 5%;
 }
 
+.toolbar {
+    padding: 5px;
+}
+
 .coveragePin {
     position: absolute;
     border-radius: 4px;

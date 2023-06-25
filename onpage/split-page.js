@@ -22,10 +22,15 @@ function setBarText(arr) {
 }
 
 function setBarTests(arr) {
+    console.log("Tests: "+ arr[0].tests);
+    console.log("Keys: "+ Object.keys(arr[0].tests));
+
     for (let i in arr) {
+        console.log("arr[i]: "+JSON.stringify(arr[i]))
         if (arr[i].fullPath !== null) {
-            for (let k in arr[i].urls) {
-                barTests = barTests + Array(indent).join('--') + arr[i].urls[k] + "<br>";
+            const keys = Object.keys(arr[i].tests)
+            for (let k in keys) {
+                barTests = barTests + Array(indent).join('--') + keys[k] + "<br>";
             }
         }
         if((arr.length - 1) === Number(i)) {
@@ -52,37 +57,48 @@ function barTabs() {
     return info;
 }
 
+function createToolBar() {
+    let toolbar = document.createElement("div");
+    toolbar.classList.add("toolbar")
+
+    let button = document.createElement("button");
+    button.innerHTML = "Reset"
+    button.onclick = function () {
+        showElements(arr1);
+        let section1 = document.getElementById("section1");
+        section1.innerHTML = barText;
+
+        let section2 = document.getElementById("section2");
+        section2.innerHTML = barTests;
+    };
+    toolbar.appendChild(button)
+
+    return toolbar;
+}
+
 function splitAndShowInfo() {
     const bodyWrapper = wrapAll(document.body);
     bodyWrapper.classList.add("bodyWrapper")
 
     var bar = document.createElement("div");
     bar.classList.add("infoBar");
-    setBarText(arr1);
-
-    var button = document.createElement("input");
-    button.type = "button";
-    button.onclick = function () {
-        showElements(arr1);
-        var section1 = document.getElementById("section1");
-        section1.innerHTML = barText;
-    };
-    bar.appendChild(button);
-
+    bar.appendChild(createToolBar())
     bar.appendChild(barTabs());
 
     var row = document.createElement("div");
     row.classList.add("pageContainer");
-
     row.appendChild(bodyWrapper);
     row.appendChild(bar);
+
     document.body.appendChild(row);
 
+    setBarText(arr1);
     var section1 = document.getElementById("section1");
     section1.innerHTML = barText;
+
     setBarTests(arr1);
-    var section1 = document.getElementById("section2");
-    section1.innerHTML = barTests;
+    var section2 = document.getElementById("section2");
+    section2.innerHTML = barTests;
 }
 
 splitAndShowInfo();
