@@ -29,13 +29,13 @@ function showData() {
     const locatorsStr = localStorage.getItem("locators")
     if (locatorsStr != null) {
         chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-            chrome.tabs.insertCSS(tabs[0].id, {
-                file : "onpage/main.css"
+            chrome.scripting.insertCSS({
+                target: {tabId: tabs[0].id},
+                files: ["onpage/main.css"]
             });
-            chrome.tabs.executeScript(tabs[0].id, { file: "onpage/split-page.js" }, function() {
-                chrome.tabs.executeScript(tabs[0].id, { file: "onpage/show-locators.js" }, function() {
-                    chrome.tabs.executeScript(tabs[0].id, { file: "onpage/show-info.js" })
-                })
+            chrome.scripting.executeScript({
+                target: {tabId: tabs[0].id},
+                files: ['onpage/split-page.js', "onpage/show-locators.js", "onpage/show-info.js"]
             });
         });
     }
