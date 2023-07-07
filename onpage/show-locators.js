@@ -1,4 +1,4 @@
-var arr1 = JSON.parse(localStorage.getItem('locators'));
+arr1 = JSON.parse(localStorage.getItem('locators'));
 
 function addPin(element, currentNode) {
     let pin = document.createElement('div');

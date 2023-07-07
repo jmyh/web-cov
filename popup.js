@@ -18,6 +18,8 @@ function downloadData() {
       const result = reader.result
       console.log(result);
       localStorage.setItem("locators", JSON.stringify(result))
+      console.log("Saved")
+      console.log(localStorage.getItem("locators"))
   };
     reader.onerror = function() {
       console.log(reader.error);

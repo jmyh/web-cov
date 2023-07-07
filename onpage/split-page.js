@@ -1,8 +1,7 @@
-var arr1 = JSON.parse(localStorage.getItem('locators'));
-
 var barText = "";
 var barTests = "";
 var indent = 1;
+let arr1 = null
 
 const wrapAll = (target, wrapper = document.createElement('div')) => {
     [...target.childNodes].forEach(child => wrapper.appendChild(child));
@@ -22,11 +21,7 @@ function setBarText(arr) {
 }
 
 function setBarTests(arr) {
-    console.log("Tests: "+ arr[0].tests);
-    console.log("Keys: "+ Object.keys(arr[0].tests));
-
     for (let i in arr) {
-        console.log("arr[i]: "+JSON.stringify(arr[i]))
         if (arr[i].fullPath !== null) {
             const keys = Object.keys(arr[i].tests)
             for (let k in keys) {
@@ -38,12 +33,13 @@ function setBarTests(arr) {
         }
         barTests = barTests + '<br/>'
     }
-    return barText;
+    return barTests;
 }
 
-function barTabs() {
-    var info = document.createElement("div");
+function createTabs() {
+    let info = document.createElement("div");
     info.id = "coverageInfoBar";
+
 
     info.innerHTML =
         '<div class="coverageInfoBar">' +
@@ -61,6 +57,36 @@ function createToolBar() {
     let toolbar = document.createElement("div");
     toolbar.classList.add("toolbar")
 
+    let locatorInput = document.createElement("input");
+    locatorInput.type = "file"
+    locatorInput.id = "locatorInput"
+    toolbar.appendChild(locatorInput)
+
+    let updateLocatorsBtn = document.createElement("button");
+    updateLocatorsBtn.innerHTML = "Update"
+    updateLocatorsBtn.onclick = function () {
+        let locatorFile = locatorInput.files[0]
+        const reader = new FileReader();
+        reader.onload = function() {
+            let resultStr = reader.result;
+            let result = JSON.parse(resultStr)
+            localStorage.setItem("locators", JSON.stringify(result))
+            arr1 = JSON.parse(localStorage.getItem("locators"));
+
+            if (!isTabsCreated()) {
+                let parent = document.getElementsByClassName("infoBar")[0];
+                let warningMessage = document.getElementById("warningMessage")
+                parent.replaceChild(createTabs(), warningMessage)
+            }
+            displayCoverageInfo();
+        };
+        reader.onerror = function() {
+            console.log(reader.error);
+        };
+        reader.readAsText(locatorFile);
+    };
+    toolbar.appendChild(updateLocatorsBtn)
+
     let button = document.createElement("button");
     button.innerHTML = "Reset"
     button.onclick = function () {
@@ -76,29 +102,46 @@ function createToolBar() {
     return toolbar;
 }
 
-function splitAndShowInfo() {
-    const bodyWrapper = wrapAll(document.body);
-    bodyWrapper.classList.add("bodyWrapper")
-
-    var bar = document.createElement("div");
-    bar.classList.add("infoBar");
-    bar.appendChild(createToolBar())
-    bar.appendChild(barTabs());
-
-    var row = document.createElement("div");
-    row.classList.add("pageContainer");
-    row.appendChild(bodyWrapper);
-    row.appendChild(bar);
-
-    document.body.appendChild(row);
-
+function displayCoverageInfo() {
     setBarText(arr1);
-    var section1 = document.getElementById("section1");
+    let section1 = document.getElementById("section1");
     section1.innerHTML = barText;
 
     setBarTests(arr1);
-    var section2 = document.getElementById("section2");
+    let section2 = document.getElementById("section2");
     section2.innerHTML = barTests;
+}
+
+function isTabsCreated() {
+    return document.getElementById("coverageInfoBar") !== null;
+}
+
+function splitAndShowInfo() {
+    arr1 = JSON.parse(localStorage.getItem('locators'));
+
+    let row = document.createElement("div");
+    row.classList.add("pageContainer");
+
+    let bodyWrapper = wrapAll(document.body);
+    bodyWrapper.classList.add("bodyWrapper")
+    row.appendChild(bodyWrapper);
+
+    const bar = document.createElement("div");
+    bar.classList.add("infoBar");
+    bar.appendChild(createToolBar())
+
+    if (arr1 !== null) {
+        bar.appendChild(createTabs());
+        displayCoverageInfo();
+    } else {
+        let message = document.createElement("label");
+        message.id = "warningMessage";
+        message.innerHTML = "Sorry, you don't have any locators yet. Upload at least one to see your coverage.";
+        bar.appendChild(message)
+    }
+
+    row.appendChild(bar);
+    document.body.appendChild(row);
 }
 
 splitAndShowInfo();
