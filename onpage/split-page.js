@@ -132,7 +132,6 @@ function splitAndShowInfo() {
 
     if (arr1 !== null) {
         bar.appendChild(createTabs());
-        displayCoverageInfo();
     } else {
         let message = document.createElement("label");
         message.id = "warningMessage";
@@ -142,6 +141,10 @@ function splitAndShowInfo() {
 
     row.appendChild(bar);
     document.body.appendChild(row);
+
+    if (arr1 !== null) {
+        displayCoverageInfo();
+    }
 }
 
 splitAndShowInfo();
