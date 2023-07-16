@@ -1,24 +1,14 @@
 <!DOCTYPE html>
 <html>
-    <head>
-      <style>
-          button {
-              background-color: #aaaaaa;
-              border: none;
-              color: #009933;
-              padding: 5px 10px;
-              text-align: center;
-              text-decoration: none;
-              display: inline-block;
-              font-size: 16px;
-              margin: 4px 2px;
-              cursor: pointer;
-          }
-      </style>
-    </head>
+<head>
+    <link rel="stylesheet" href="style.css">
+</head>
     <body>
-        <button id="showLocators" class="button">Show Locators</button>
-        <button id="hideLocators" class="button">Hide Locators</button>
+        <label class="toggle">
+            <input class="toggle-checkbox" type="checkbox">
+            <div class="toggle-switch"></div>
+            <span class="toggle-label">Show locators</span>
+        </label>
         <script src="popup.js"></script>
     </body>
 </html>

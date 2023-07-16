@@ -1,10 +1,6 @@
-document.getElementById('showLocators').onclick = function () {
-    showData()
-};
-
-document.getElementById('hideLocators').onclick = function () {
-    hideData()
-};
+document.querySelector(".toggle-checkbox").addEventListener('change', function() {
+    (this.checked) ? showData() : hideData();
+});
 
 function showData() {
     const locatorsStr = localStorage.getItem("locators")
