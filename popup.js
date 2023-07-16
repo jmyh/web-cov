@@ -2,30 +2,9 @@ document.getElementById('showLocators').onclick = function () {
     showData()
 };
 
-document.getElementById('save').onclick = function () {
-    downloadData();
+document.getElementById('hideLocators').onclick = function () {
+    hideData()
 };
-
-function downloadData() {
-
-  const fileInputEl = document.getElementById('dataSource');
-  let locatorFile = fileInputEl.files[0]
-  console.log(fileInputEl)
-  const reader = new FileReader();
-  reader.readAsText(locatorFile);
-
-  reader.onload = function() {
-      const result = reader.result
-      console.log(result);
-      localStorage.setItem("locators", JSON.stringify(result))
-      console.log("Saved")
-      console.log(localStorage.getItem("locators"))
-  };
-    reader.onerror = function() {
-      console.log(reader.error);
-  };
-
-}
 
 function showData() {
     const locatorsStr = localStorage.getItem("locators")
@@ -41,4 +20,13 @@ function showData() {
             });
         });
     }
+}
+
+function hideData() {
+    chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
+        chrome.scripting.executeScript({
+            target: {tabId: tabs[0].id},
+            files: ['onpage/rollback-page.js']
+        });
+    });
 }

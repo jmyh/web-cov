@@ -1,4 +1,6 @@
+
 arr1 = JSON.parse(localStorage.getItem('locators'));
+intervalId = null
 
 function addPin(element, currentNode) {
     let pin = document.createElement('div');
@@ -104,4 +106,10 @@ function wroomwroom() {
     }
 }
 
-setInterval(wroomwroom, 1000);
+function stopShowingLocators() {
+    if (intervalId !== null) {
+        clearInterval(intervalId);
+    }
+}
+
+intervalId = setInterval(wroomwroom, 1000);

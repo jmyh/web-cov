@@ -1,15 +1,8 @@
-var barText = "";
-var barTests = "";
-var indent = 1;
-let arr1 = null
-
-const wrapAll = (target, wrapper = document.createElement('div')) => {
-    [...target.childNodes].forEach(child => wrapper.appendChild(child));
-    target.appendChild(wrapper);
-    return wrapper
-};
 
 function setBarText(arr) {
+    let barText = "";
+    let indent = 1;
+
     for (let i in arr) {
         barText = barText + Array(indent).join('--') + arr[i].fullPath + "<br>";
         if((arr.length - 1) === Number(i)) {
@@ -21,6 +14,9 @@ function setBarText(arr) {
 }
 
 function setBarTests(arr) {
+    let barTests = "";
+    let indent = 1;
+
     for (let i in arr) {
         if (arr[i].fullPath !== null) {
             const keys = Object.keys(arr[i].tests)
@@ -71,14 +67,14 @@ function createToolBar() {
             let resultStr = reader.result;
             let result = JSON.parse(resultStr)
             localStorage.setItem("locators", JSON.stringify(result))
-            arr1 = JSON.parse(localStorage.getItem("locators"));
+            arr1 = readDataFromStorage();
 
             if (!isTabsCreated()) {
                 let parent = document.getElementsByClassName("infoBar")[0];
                 let warningMessage = document.getElementById("warningMessage")
                 parent.replaceChild(createTabs(), warningMessage)
             }
-            displayCoverageInfo();
+            displayCoverageInfo(arr1);
         };
         reader.onerror = function() {
             console.log(reader.error);
@@ -90,10 +86,13 @@ function createToolBar() {
     let button = document.createElement("button");
     button.innerHTML = "Reset"
     button.onclick = function () {
+        arr1 = readDataFromStorage()
         showElements(arr1);
+        let barText = setBarText(arr1);
         let section1 = document.getElementById("section1");
         section1.innerHTML = barText;
 
+        let barTests = setBarTests(arr1);
         let section2 = document.getElementById("section2");
         section2.innerHTML = barTests;
     };
@@ -102,12 +101,12 @@ function createToolBar() {
     return toolbar;
 }
 
-function displayCoverageInfo() {
-    setBarText(arr1);
+function displayCoverageInfo(arr) {
+    let barText = setBarText(arr);
     let section1 = document.getElementById("section1");
     section1.innerHTML = barText;
 
-    setBarTests(arr1);
+    let barTests = setBarTests(arr);
     let section2 = document.getElementById("section2");
     section2.innerHTML = barTests;
 }
@@ -116,8 +115,18 @@ function isTabsCreated() {
     return document.getElementById("coverageInfoBar") !== null;
 }
 
+function readDataFromStorage() {
+    return JSON.parse(localStorage.getItem('locators'));
+}
+
 function splitAndShowInfo() {
-    arr1 = JSON.parse(localStorage.getItem('locators'));
+    const wrapAll = (target, wrapper = document.createElement('div')) => {
+        [...target.childNodes].forEach(child => wrapper.appendChild(child));
+        target.appendChild(wrapper);
+        return wrapper
+    };
+
+    const arr1 = readDataFromStorage();
 
     let row = document.createElement("div");
     row.classList.add("pageContainer");
@@ -143,7 +152,7 @@ function splitAndShowInfo() {
     document.body.appendChild(row);
 
     if (arr1 !== null) {
-        displayCoverageInfo();
+        displayCoverageInfo(arr1);
     }
 }
 
