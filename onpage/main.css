@@ -65,6 +65,7 @@
 }
 
 .coverageInfoBar section {
+    color: #555;
     display: none;
     padding: 15px;
     background: #fff;

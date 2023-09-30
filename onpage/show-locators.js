@@ -10,8 +10,9 @@ function addPin(element, currentNode) {
     pin.innerHTML = currentNode.count.toString();
     pin.setAttribute("title", currentNode.fullPath);
     let tests = "";
-    for (let k in currentNode.tests) {
-        tests = tests + k + '</br>';
+    const values = Object.values(currentNode.testNames);
+    for (let k in values) {
+        tests = tests + values[k] + '</br>';
     }
     pin.setAttribute("data-tests", tests);
 
@@ -28,9 +29,7 @@ function getMapSize(x) {
 
 function findElement(node) {
     let elem;
-    let elem1 = document
-        .evaluate(node.fullPath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
-        .singleNodeValue;
+    let elem1 = document.querySelector(node.fullPath)
 
     if (elem1 == null) {
         return null;

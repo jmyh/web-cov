@@ -15,21 +15,18 @@ function setBarText(arr) {
 
 function setBarTests(arr) {
     let barTests = "";
-    let indent = 1;
-
+    let uniqueTests = new Map();
     for (let i in arr) {
         if (arr[i].fullPath !== null) {
-            const keys = Object.keys(arr[i].tests)
+            const keys = Object.keys(arr[i].testNames)
             for (let k in keys) {
-                barTests = barTests + Array(indent).join('--') + keys[k] + "<br>";
+                if (!uniqueTests.has(keys[k]))
+                    uniqueTests.set(keys[k], arr[i].testNames[keys[k]])
             }
         }
-        if((arr.length - 1) === Number(i)) {
-            indent--;
-        }
-        barTests = barTests + '<br/>'
     }
-    return barTests;
+
+    return Array.from(uniqueTests.values()).join("<br>") + '<br>'
 }
 
 function createTabs() {
