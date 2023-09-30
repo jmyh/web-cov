@@ -1,5 +1,5 @@
 .bodyWrapper {
-    flex: 0 0 69%;
+    flex: 0 0 70%;
     overflow: auto;
 }
 
@@ -10,7 +10,7 @@
     width: 30%;
     overflow: auto;
     position: fixed;
-    margin-left: 71%;
+    margin-left: 70%;
 }
 
 .pageContainer {
