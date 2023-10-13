@@ -3,6 +3,7 @@
    "version": "1.0",
    "description": "Build an Extension!",
    "permissions": ["activeTab", "scripting", "declarativeContent", "storage", "file:///*"],
+   "host_permissions": ["https://*/*", "http://*/*"],
    "action": {
      "default_popup": "popup.html",
      "default_icon": {
