@@ -40,6 +40,7 @@ function findElement(node) {
     }
 
     if (elem1.tagName === 'INPUT') {
+        elem1.parentNode.style.position = "relative";
         elem = elem1.parentNode;
     } else {
         elem = elem1;
