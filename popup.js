@@ -1,9 +1,19 @@
 function showData() {
     chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-        chrome.scripting.insertCSS({
+        chrome.scripting.executeScript({
             target: {tabId: tabs[0].id},
-            files: ["onpage/main.css"]
+            files: ['onpage/content-check.js'],
+        }).then(function(results) {
+            if (chrome.runtime.lastError || !results || !results.length) {
+                return;  // Permission error, tab closed, etc.
+            }
+            if (results[0].result !== true) {
+                // Not already inserted before, do your thing, e.g. add your CSS:
+                chrome.scripting.insertCSS({target: {tabId: tabs[0].id}, files: ["onpage/main.css"]});
+                console.log("File was upload"+ results);
+            }
         });
+
         chrome.scripting.executeScript({
             target: {tabId: tabs[0].id},
             files: ['onpage/split-page.js', "onpage/show-locators.js", "onpage/show-info.js"]
