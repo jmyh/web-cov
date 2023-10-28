@@ -1,7 +1,7 @@
 {
-   "name": "Getting Started Example",
+   "name": "WebCov",
    "version": "1.0",
-   "description": "Build an Extension!",
+   "description": "Chrome extension for visualizing test coverage",
    "permissions": ["activeTab", "scripting", "declarativeContent", "storage", "file:///*"],
    "host_permissions": ["https://*/*", "http://*/*"],
    "action": {
